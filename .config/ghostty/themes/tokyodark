@@ -1,0 +1,26 @@
+# Tokyodark theme for Ghostty
+# https://github.com/tiagovla/tokyodark.nvim
+
+background = #11121D
+foreground = #A0A8CD
+cursor-color = #A0A8CD
+
+selection-background = #353945
+selection-foreground = #A0A8CD
+
+palette = 0  = #06080A
+palette = 1  = #EE6D85
+palette = 2  = #95C561
+palette = 3  = #D7A65F
+palette = 4  = #7199EE
+palette = 5  = #A485DD
+palette = 6  = #38A89D
+palette = 7  = #A0A8CD
+palette = 8  = #212234
+palette = 9  = #EE6D85
+palette = 10 = #95C561
+palette = 11 = #D7A65F
+palette = 12 = #7199EE
+palette = 13 = #A485DD
+palette = 14 = #38A89D
+palette = 15 = #A0A8CD
