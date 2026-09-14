@@ -1,2 +1,4 @@
+font-family = "JetBrainsMono Nerd Font Medium"
 font-size = 18
 theme = "tokyodark" 
+shell-integration-features = ssh-env
