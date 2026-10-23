@@ -301,8 +301,11 @@ do
   vim.pack.add { gh 'folke/tokyonight.nvim' }
   ---@diagnostic disable-next-line: missing-fields
   require('tokyonight').setup {
+    transparent = true, -- transparent editor background (also covers SignColumn, NormalNC, etc.)
     styles = {
       comments = { italic = true }, -- Disable italics in comments
+      sidebars = 'transparent',
+      floats = 'dark', -- keep popups/menus/Telescope opaque so text stays readable
     },
   }
 
@@ -342,104 +345,13 @@ do
   -- Simple and easy statusline.
   --  You could remove this setup call if you don't like it,
   --  and try some other statusline plugin
+  require('mini.statusline').setup { use_icons = vim.g.have_nerd_font }
 
   local colors = {
     bg = '#1a1b26',
-    fb = '#c0caf5',
+    fg = '#c0caf5',
     blue = '#7aa2f7',
   }
-  local statusline = require 'mini.statusline'
-
-  local has_devicons, devicons = pcall(require, 'mini.icons')
-
-  local function vscode_git_section()
-    local head = vim.b.gitsigns_head or vim.g.gitsigns_head
-    if not head or head == '' then return '' end
-    return ' ' .. head
-  end
-
-  local function vscode_diagnostics_section()
-    local diagnostics = vim.diagnostic.get(0)
-    local errors = #vim.tbl_filter(function(d) return d.severity == vim.diagnostic.severity.ERROR end, diagnostics)
-    local warnings = #vim.tbl_filter(function(d) return d.severity == vim.diagnostic.severity.WARN end, diagnostics)
-
-    local parts = {}
-    if errors > 0 then table.insert(parts, ' ' .. errors) end
-    if warnings > 0 then table.insert(parts, ' ' .. warnings) end
-
-    return table.concat(parts, ' ')
-  end
-
-  local function vscode_encoding_section()
-    local encoding = vim.bo.fileencoding ~= '' and vim.bo.fileencoding or vim.o.encoding
-    local format = vim.bo.fileformat
-    return encoding:upper() .. ' ' .. format:upper()
-  end
-
-  local function vscode_position_section()
-    local line = vim.fn.line '.'
-    local col = vim.fn.virtcol '.'
-    return string.format('Ln %d, Col %d', line, col)
-  end
-
-  local function vscode_filetype_section()
-    local filetype = vim.bo.filetype
-    if filetype == '' then return 'text' end
-
-    if has_devicons then
-      local icon, icon_hl = devicons.get('filetype', filetype)
-      if icon then return icon .. ' ' .. filetype end
-    end
-
-    return filetype
-  end
-
-  statusline.setup {
-    use_icons = vim.g.have_nerd_font,
-    set_vim_settings = false,
-    content = {
-      active = function()
-        if vim.bo.filetype == 'neo-tree' then return '' end
-
-        local mode, mode_hl = statusline.section_mode { trunc_width = 120 }
-        local git = vscode_git_section()
-        local diagnostics = vscode_diagnostics_section()
-        local filename = statusline.section_filename { trunc_width = 140 }
-        local filetype = vscode_filetype_section()
-        local encoding = vscode_encoding_section()
-        local position = vscode_position_section()
-
-        return statusline.combine_groups {
-          { hl = mode_hl, strings = { mode } },
-          { hl = 'MiniStatuslineDevinfo', strings = { git } },
-          { hl = 'MiniStatuslineDevinfo', strings = { diagnostics } },
-          '%<',
-          { hl = 'MiniStatuslineFilename', strings = { filename } },
-          '%=',
-          { hl = 'MiniStatuslineFileinfo', strings = { filetype } },
-          { hl = 'MiniStatuslineFileinfo', strings = { encoding } },
-          { hl = 'MiniStatuslineFileinfo', strings = { position } },
-        }
-      end,
-      inactive = function()
-        if vim.bo.filetype == 'neo-tree' then return '' end
-        return statusline.combine_groups {
-          { hl = 'MiniStatuslineInactive', strings = { '%f%m%r' } },
-        }
-      end,
-    },
-  }
-
-  vim.api.nvim_set_hl(0, 'MiniStatuslineDevinfo', { bg = colors.blue, fg = colors.bg })
-  vim.api.nvim_set_hl(0, 'MiniStatuslineFileinfo', { bg = colors.blue, fg = colors.bg })
-  vim.api.nvim_set_hl(0, 'MiniStatuslineFilename', { bg = colors.blue, fg = colors.bg })
-  vim.api.nvim_set_hl(0, 'MiniStatuslineInactive', { bg = colors.bg, fg = colors.fg })
-  vim.api.nvim_set_hl(0, 'MiniStatuslineModeNormal', { bg = colors.blue, fg = colors.bg, bold = true })
-  vim.api.nvim_set_hl(0, 'MiniStatuslineModeInsert', { bg = colors.blue, fg = colors.bg, bold = true })
-  vim.api.nvim_set_hl(0, 'MiniStatuslineModeVisual', { bg = colors.blue, fg = colors.bg, bold = true })
-  vim.api.nvim_set_hl(0, 'MiniStatuslineModeReplace', { bg = colors.blue, fg = colors.bg, bold = true })
-  vim.api.nvim_set_hl(0, 'MiniStatuslineModeCommand', { bg = colors.blue, fg = colors.bg, bold = true })
-  vim.api.nvim_set_hl(0, 'MiniStatuslineModeOther', { bg = colors.blue, fg = colors.bg, bold = true })
 
   require('mini.tabline').setup {
     show_icons = vim.g.have_nerd_font,
