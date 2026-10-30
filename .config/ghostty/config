@@ -1,6 +1,11 @@
 font-family = "JetBrainsMono Nerd Font Medium"
-font-size = 18
+font-size = 16
 theme = "tokyodark" 
-shell-integration-features = ssh-env
-background-opacity = 0.70
-background-blur = true
+shell-integration-features = ssh-env,no-title
+background-opacity = 0.85
+background-blur = macos-glass-regular
+
+macos-titlebar-style = tabs
+title = " "
+
+bell-features = no-system,no-audio,no-attention,no-title,no-border
