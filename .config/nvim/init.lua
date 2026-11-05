@@ -110,11 +110,19 @@ do
   vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
 
   -- Keybinds to make split navigation easier.
-  --  Use CTRL+<hjkl> to switch between windows
-  vim.keymap.set('n', '<C-h>', '<C-w><C-h>', { desc = 'Move focus to the left window' })
-  vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
-  vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
-  vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
+  --  Use CTRL+<hjkl> to switch between windows; at the edge of nvim, hand off to the
+  --  neighbouring tmux pane (tmux.conf forwards the same keys to nvim when it is focused).
+  local function nav(dir, tmux_flag)
+    return function()
+      local win = vim.api.nvim_get_current_win()
+      vim.cmd.wincmd(dir)
+      if win == vim.api.nvim_get_current_win() and vim.env.TMUX then vim.system { 'tmux', 'select-pane', tmux_flag } end
+    end
+  end
+  vim.keymap.set('n', '<C-h>', nav('h', '-L'), { desc = 'Move focus to the left window/pane' })
+  vim.keymap.set('n', '<C-l>', nav('l', '-R'), { desc = 'Move focus to the right window/pane' })
+  vim.keymap.set('n', '<C-j>', nav('j', '-D'), { desc = 'Move focus to the lower window/pane' })
+  vim.keymap.set('n', '<C-k>', nav('k', '-U'), { desc = 'Move focus to the upper window/pane' })
 
   --  Use CTRL+SHIFT+<hjkl> to move windows around
   vim.keymap.set('n', '<C-S-h>', '<C-w>H', { desc = 'Move window to the left' })
@@ -175,7 +183,7 @@ do
 
   -- Search
   vim.keymap.set('n', '<C-f>', '/', vim.tbl_extend('force', opts, { desc = 'Find in file' }))
-  vim.keymap.set('n', '<C-h>', ':%s/', vim.tbl_extend('force', opts, { desc = 'Find & replace' }))
+  vim.keymap.set('n', '<leader>sR', ':%s/', vim.tbl_extend('force', opts, { desc = '[S]earch & [R]eplace' })) -- was <C-h>, which clashed with window nav
 
   -- Clear search highlight on Escape
   vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>', vim.tbl_extend('force', opts, { desc = 'Clear search highlight' }))

@@ -68,3 +68,9 @@ alias ls=lsd
 
 # ── local overrides ──────────────────────────────────────────────
 [[ -f ~/.zshrc.local ]] && source ~/.zshrc.local
+
+# ── tmux autostart ───────────────────────────────────────────────
+# escape hatch: TMUX=1 zsh
+if [[ -o interactive && -t 1 && -z $TMUX && -z $NVIM && -z $VSCODE_INJECTION ]] && (( $+commands[tmux] )); then
+  exec tmux new-session -A -s main
+fi
