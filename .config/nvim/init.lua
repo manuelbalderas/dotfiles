@@ -174,8 +174,8 @@ do
   vim.keymap.set('n', '<A-S-Down>', '<cmd>t.<CR>', vim.tbl_extend('force', opts, { desc = 'Duplicate line below' }))
   vim.keymap.set('v', '<A-S-Down>', ":t'><CR>gv", vim.tbl_extend('force', opts, { desc = 'Duplicate selection below' }))
 
-  -- Delete line without yanking (Ctrl+Shift+K)
-  vim.keymap.set('n', '<C-S-k>', '<cmd>d _<CR>', vim.tbl_extend('force', opts, { desc = 'Delete line (no yank)' }))
+  -- Delete line without yanking
+  vim.keymap.set('n', '<leader>dd', '<cmd>d _<CR>', vim.tbl_extend('force', opts, { desc = '[D]elete line, no yank' }))
 
   -- Comment toggle (Ctrl+/)  — works with Comment.nvim or built-in (Neovim 0.10+)
   vim.keymap.set('n', '<C-/>', 'gcc', { noremap = false, silent = true, desc = 'Toggle comment' })
@@ -200,8 +200,8 @@ do
   vim.keymap.set('n', 'F2', vim.lsp.buf.rename, vim.tbl_extend('force', opts, { desc = 'Rename symbol' }))
   vim.keymap.set('n', '<C-Space>', vim.lsp.buf.hover, vim.tbl_extend('force', opts, { desc = 'Hover docs' }))
 
-  -- Sidebar / Explorer
-  vim.keymap.set('n', '<C-b>', '<cmd>NvimTreeToggle<CR>', vim.tbl_extend('force', opts, { desc = 'Toggle file explorer' }))
+  -- Sidebar / Explorer: use `\` (Neotree reveal, set in kickstart/plugins/neo-tree.lua).
+  -- Not C-b: that's the tmux prefix key and never reaches nvim when run inside tmux.
 
   -- Splits
   vim.keymap.set('n', '<C-S-5>', '<cmd>vsplit<CR>', vim.tbl_extend('force', opts, { desc = 'Split editor right' }))
